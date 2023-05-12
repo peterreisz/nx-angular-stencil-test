@@ -1,0 +1,43 @@
+diff --git a/node_modules/@stencil/angular-output-target/dist/index.cjs.js b/node_modules/@stencil/angular-output-target/dist/index.cjs.js
+index 2e1b936..c0622d4 100644
+--- a/node_modules/@stencil/angular-output-target/dist/index.cjs.js
++++ b/node_modules/@stencil/angular-output-target/dist/index.cjs.js
+@@ -104,6 +104,9 @@ const createComponentDefinition = (componentCorePackage, distTypesDir, rootDir,
+     if (inputs.length > 0) {
+         directiveOpts.push(`inputs: ['${inputs.join(`', '`)}']`);
+     }
++    if (outputs.length > 0) {
++      directiveOpts.push(`outputs: ['${outputs.map(o => o.name).join(`', '`)}']`);
++    }
+     const tagNameAsPascal = dashToPascalCase(cmpMeta.tagName);
+     const outputsInterface = new Set();
+     const outputReferenceRemap = {};
+@@ -120,7 +123,7 @@ const createComponentDefinition = (componentCorePackage, distTypesDir, rootDir,
+                     const dirPath = includeImportCustomElements ? `/${customElementsDir || 'components'}` : '';
+                     importLocation = `${normalizePath(componentCorePackage)}${dirPath}`;
+                 }
+-                outputsInterface.add(`import type { ${reference} as ${remappedReference} } from '${importLocation}';`);
++                outputsInterface.add(`import type { ${reference} } from '${importLocation}';`);
+             }
+         });
+     });
+@@ -152,9 +155,9 @@ const createComponentDefinition = (componentCorePackage, distTypesDir, rootDir,
+         }
+     });
+     const lines = [
++        outputs.length ? `import type { ${tagNameAsPascal}CustomEvent } from '${componentCorePackage}';` : '',
+         '',
+         `${[...outputsInterface].join('\n')}
+-export declare interface ${tagNameAsPascal} extends Components.${tagNameAsPascal} {${componentEvents.length > 1 ? componentEvents.join('\n') : ''}}
+ 
+ ${getProxyCmp(cmpMeta.tagName, includeImportCustomElements, inputs, methods)}
+ @Component({
+@@ -162,6 +165,8 @@ ${getProxyCmp(cmpMeta.tagName, includeImportCustomElements, inputs, methods)}
+ })
+ export class ${tagNameAsPascal} {`,
+     ];
++    lines.push(...inputs.map(input => `  '${input}'!: Components.${tagNameAsPascal}['${input}'];`));
++    lines.push(...outputs.map(output => `  '${output.name}'!: EventEmitter<${tagNameAsPascal}CustomEvent<${output.complexType.resolved}>>;`));
+     lines.push('  protected el: HTMLElement;');
+     lines.push(`  constructor(c: ChangeDetectorRef, r: ElementRef, protected z: NgZone) {
+     c.detach();

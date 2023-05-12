@@ -1,0 +1,31 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "rootDir": ".",
+    "sourceMap": true,
+    "declaration": false,
+    "moduleResolution": "node",
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "importHelpers": true,
+    "target": "es2015",
+    "module": "esnext",
+    "lib": ["es2017", "dom"],
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
+    "baseUrl": ".",
+    "paths": {
+      "@nx-angular-stencil-test/core-components": ["dist/packages/core-components"],
+      "@nx-angular-stencil-test/core-components-angular": [
+        "packages/core-components-angular/src/index.ts"
+      ],
+      "@nx-angular-stencil-test/core-components/*": [
+        "dist/packages/core-components/dist/components/*"
+      ],
+      "@nx-angular-stencil-test/core-components/loader": [
+        "dist/packages/core-components/loader"
+      ]
+    }
+  },
+  "exclude": ["node_modules", "tmp"]
+}

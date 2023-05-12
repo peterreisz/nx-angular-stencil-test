@@ -1,0 +1,25 @@
+{
+  "projectType": "library",
+  "sourceRoot": "packages/core-components-angular/src",
+  "prefix": "nx-angular-stencil-test",
+  "targets": {
+    "build": {
+      "executor": "@nrwl/angular:package",
+      "outputs": ["dist/packages/core-components-angular"],
+      "options": {
+        "project": "packages/core-components-angular/ng-package.json"
+      },
+      "configurations": {
+        "production": {
+          "tsConfig": "packages/core-components-angular/tsconfig.lib.prod.json"
+        },
+        "development": {
+          "tsConfig": "packages/core-components-angular/tsconfig.lib.json"
+        }
+      },
+      "defaultConfiguration": "production"
+    }
+  },
+  "tags": [],
+  "implicitDependencies": ["core-components"]
+}
